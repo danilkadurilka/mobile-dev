@@ -64,7 +64,7 @@ class DepositVM(private val dao: DepositDAO) : ViewModel()
         }
     }
 
-    fun calculation()
+    fun calculate()//calculate
     {
         val p = uiState.value.amount.toDoubleOrNull() ?: 0.0
         val n = uiState.value.months.toIntOrNull() ?: 0
@@ -74,9 +74,13 @@ class DepositVM(private val dao: DepositDAO) : ViewModel()
         val monthlyRate = (r/100)/12
         repeat(n)
         {
-            total += (total*monthlyRate) + m
+            total += total * monthlyRate
+            if (m != null && m > 0) {
+                total += m
+            }
         }
-        val profit = total-p-(m*n)
+        val totalDeposits = p + (m ?: 0.0) * n
+        val profit = total - totalDeposits
         val dateToStr = SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.getDefault()).format(Date())
         _uiState.update{
             it.copy(result= DepositEntity(
@@ -92,18 +96,22 @@ class DepositVM(private val dao: DepositDAO) : ViewModel()
         }
     }
 
-    fun save()
-    {
-        viewModelScope.launch(Dispatchers.IO){
-            uiState.value.result?.let{ entity ->
+    fun save() {
+        viewModelScope.launch(Dispatchers.IO) {
+            uiState.value.result?.let { entity ->
                 dao.insert(entity)
             }
         }
     }
 
-    fun reset()
-    {
-        _uiState.update{
+    fun reset() {
+        _uiState.update {
+            DepositUiState(history = it.history)
+        }
+    }
+
+    fun resetToMain() {
+        _uiState.update {
             DepositUiState(history = it.history)
         }
     }
