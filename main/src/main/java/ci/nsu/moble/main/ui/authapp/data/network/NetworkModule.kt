@@ -27,11 +27,9 @@ object NetworkModule {
             .writeTimeout(30, TimeUnit.SECONDS)
             .build()
 
-        // Настройка JSON для Kotlinx Serialization
         val json = Json {
             ignoreUnknownKeys = true
             isLenient = true
-            coerceInputValues = true
         }
 
         val contentType = "application/json".toMediaType()

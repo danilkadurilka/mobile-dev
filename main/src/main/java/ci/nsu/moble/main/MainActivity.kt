@@ -1,4 +1,4 @@
-package com.example.authapp
+package ci.nsu.moble.main
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -17,7 +17,6 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Инициализация зависимостей
         tokenManager = TokenManager(this)
         val apiService = NetworkModule.provideApiService(tokenManager)
         authRepository = AuthRepository(apiService, tokenManager)
