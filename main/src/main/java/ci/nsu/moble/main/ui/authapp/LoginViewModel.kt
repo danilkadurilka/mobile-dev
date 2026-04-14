@@ -1,4 +1,4 @@
-package com.example.authapp.viewmodel
+package ci.nsu.moble.main.ui.authapp
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

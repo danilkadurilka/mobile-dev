@@ -7,8 +7,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import ci.nsu.moble.main.ui.authapp.data.repository.AuthRepository
 import ci.nsu.moble.main.ui.authapp.data.storage.TokenManager
-import com.example.authapp.ui.screens.LoginScreen
-import com.example.authapp.viewmodel.LoginViewModel
 
 sealed class Screen(val route: String) {
     object Login : Screen("login")
