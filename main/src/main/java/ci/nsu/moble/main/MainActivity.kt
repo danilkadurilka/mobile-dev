@@ -16,10 +16,10 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         tokenManager = TokenManager(this)
         val apiService = NetworkModule.provideApiService(tokenManager)
-        authRepository = AuthRepository(apiService, tokenManager)
+        val publicApiService = NetworkModule.providePublicApiService()
+        authRepository = AuthRepository(apiService, publicApiService, tokenManager)
 
         setContent {
             PracticeTheme {

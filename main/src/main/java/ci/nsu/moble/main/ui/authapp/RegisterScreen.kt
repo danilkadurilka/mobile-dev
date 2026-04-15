@@ -4,6 +4,9 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.ArrowDropUp
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -123,27 +126,33 @@ fun RegisterScreen(
                 LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
             }
             is RegisterViewModel.GroupsState.Success -> {
-                ExposedDropdownMenuBox(
-                    expanded = expanded,
-                    onExpandedChange = { expanded = it }
-                ) {
+                Column(modifier = Modifier.fillMaxWidth()) {
                     OutlinedTextField(
-                        value = groups.find { group -> group.id == selectedGroupId }?.name ?: "",
+                        value = groups.find { it.groupId == selectedGroupId }?.groupName ?: "",
                         onValueChange = {},
                         readOnly = true,
                         label = { Text("Группа *") },
                         modifier = Modifier.fillMaxWidth(),
-                        trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) }
+                        trailingIcon = {
+                            IconButton(onClick = { expanded = !expanded }) {
+                                Icon(
+                                    if (expanded) Icons.Default.ArrowDropUp else Icons.Default.ArrowDropDown,
+                                    contentDescription = "Выбрать группу"
+                                )
+                            }
+                        }
                     )
-                    ExposedDropdownMenu(
+
+                    DropdownMenu(
                         expanded = expanded,
-                        onDismissRequest = { expanded = false }
+                        onDismissRequest = { expanded = false },
+                        modifier = Modifier.fillMaxWidth()
                     ) {
                         groups.forEach { group ->
                             DropdownMenuItem(
-                                text = { Text(group.name) },
+                                text = { Text(group.groupName) },
                                 onClick = {
-                                    selectedGroupId = group.id
+                                    selectedGroupId = group.groupId
                                     expanded = false
                                 }
                             )
@@ -209,7 +218,7 @@ fun RegisterScreen(
             onClick = {
                 viewModel.register(
                     firstName, lastName, middleName, birthDate,
-                    gender, selectedGroupId, login, password, email, phoneNumber
+                    gender, 1, login, password, email, phoneNumber
                 )
             },
             modifier = Modifier.fillMaxWidth(),

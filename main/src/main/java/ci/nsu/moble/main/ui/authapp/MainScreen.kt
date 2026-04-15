@@ -2,7 +2,7 @@ package ci.nsu.moble.main.ui.authapp
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items  // Добавьте этот импорт
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -49,7 +49,7 @@ fun MainScreen(
                         Text("Нет пользователей")
                     } else {
                         LazyColumn {
-                            items(users) { user ->  // Теперь items распознается правильно
+                            items(users) { user ->
                                 UserCard(user = user)
                             }
                         }
@@ -83,15 +83,12 @@ fun UserCard(user: UserDto) {
         Column(
             modifier = Modifier.padding(16.dp)
         ) {
+            // У user больше нет поля person, поэтому показываем логин
             Text(
-                text = "${user.person?.lastName ?: ""} ${user.person?.firstName ?: ""}".trim(),
+                text = user.login,
                 style = MaterialTheme.typography.titleMedium
             )
             Spacer(modifier = Modifier.height(4.dp))
-            Text(
-                text = "Логин: ${user.login}",
-                style = MaterialTheme.typography.bodySmall
-            )
             Text(
                 text = "Email: ${user.email}",
                 style = MaterialTheme.typography.bodySmall
@@ -100,6 +97,16 @@ fun UserCard(user: UserDto) {
                 text = "Телефон: ${user.phoneNumber}",
                 style = MaterialTheme.typography.bodySmall
             )
+            Text(
+                text = "ID пользователя: ${user.userId}",
+                style = MaterialTheme.typography.bodySmall
+            )
+            if (user.personId != null) {
+                Text(
+                    text = "ID персоны: ${user.personId}",
+                    style = MaterialTheme.typography.bodySmall
+                )
+            }
         }
     }
 }

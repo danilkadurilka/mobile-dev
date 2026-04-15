@@ -4,12 +4,14 @@ import ci.nsu.moble.main.ui.authapp.data.network.ApiService
 import ci.nsu.moble.main.ui.authapp.data.models.GroupDto
 import ci.nsu.moble.main.ui.authapp.data.models.RegisterRequest
 import ci.nsu.moble.main.ui.authapp.data.models.UserDto
+import ci.nsu.moble.main.ui.authapp.data.network.PublicApiService
 import ci.nsu.moble.main.ui.authapp.data.storage.TokenManager
 import retrofit2.HttpException
 import java.io.IOException
 
 class AuthRepository(
     private val apiService: ApiService,
+    private val publicApiService: PublicApiService,
     private val tokenManager: TokenManager
 ) {
 
@@ -64,10 +66,13 @@ class AuthRepository(
                     Result.failure(Exception("Пустой ответ от сервера"))
                 }
             } else {
-                Result.failure(Exception("Ошибка загрузки пользователей: ${response.code()}"))
+                // Пытаемся получить сообщение об ошибке от сервера
+                val errorBody = response.errorBody()?.string()
+                Result.failure(Exception("Ошибка загрузки пользователей: ${response.code()} - $errorBody"))
             }
         } catch (e: HttpException) {
-            Result.failure(Exception("Ошибка загрузки пользователей: ${e.message()}"))
+            val errorBody = e.response()?.errorBody()?.string()
+            Result.failure(Exception("Ошибка загрузки пользователей: ${e.message()} - $errorBody"))
         } catch (e: IOException) {
             Result.failure(Exception("Ошибка сети: проверьте подключение"))
         } catch (e: Exception) {
@@ -77,23 +82,14 @@ class AuthRepository(
 
     suspend fun getGroups(): Result<List<GroupDto>> {
         return try {
-            val response = apiService.getGroups()
+            val response = publicApiService.getGroups()
             if (response.isSuccessful) {
-                val groups = response.body()
-                if (groups != null) {
-                    Result.success(groups)
-                } else {
-                    Result.failure(Exception("Пустой ответ от сервера"))
-                }
+                Result.success(response.body() ?: emptyList())
             } else {
                 Result.failure(Exception("Ошибка загрузки групп: ${response.code()}"))
             }
-        } catch (e: HttpException) {
-            Result.failure(Exception("Ошибка загрузки групп: ${e.message()}"))
-        } catch (e: IOException) {
-            Result.failure(Exception("Ошибка сети: проверьте подключение"))
         } catch (e: Exception) {
-            Result.failure(Exception("Неизвестная ошибка: ${e.message}"))
+            Result.failure(Exception("Ошибка: ${e.message}"))
         }
     }
 
