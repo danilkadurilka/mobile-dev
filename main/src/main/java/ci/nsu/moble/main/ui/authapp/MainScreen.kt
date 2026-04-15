@@ -17,6 +17,9 @@ fun MainScreen(
     viewModel: MainViewModel
 ) {
     val usersState by viewModel.usersState.collectAsState()
+    LaunchedEffect(Unit) {
+        viewModel.loadUsers()
+    }
     Scaffold(
         topBar = {
             TopAppBar(
