@@ -14,7 +14,6 @@ class AuthRepository(
     private val publicApiService: PublicApiService,
     private val tokenManager: TokenManager
 ) {
-
     suspend fun login(login: String, password: String): Result<Unit> {
         return try {
             val response = apiService.login(mapOf("login" to login, "password" to password))
@@ -37,7 +36,6 @@ class AuthRepository(
             Result.failure(Exception("Неизвестная ошибка: ${e.message}"))
         }
     }
-
     suspend fun register(request: RegisterRequest): Result<Unit> {
         return try {
             val response = apiService.register(request)
@@ -54,7 +52,6 @@ class AuthRepository(
             Result.failure(Exception("Неизвестная ошибка: ${e.message}"))
         }
     }
-
     suspend fun getUsers(): Result<List<UserDto>> {
         return try {
             val response = apiService.getUsers()
@@ -66,7 +63,6 @@ class AuthRepository(
                     Result.failure(Exception("Пустой ответ от сервера"))
                 }
             } else {
-                // Пытаемся получить сообщение об ошибке от сервера
                 val errorBody = response.errorBody()?.string()
                 Result.failure(Exception("Ошибка загрузки пользователей: ${response.code()} - $errorBody"))
             }
@@ -79,7 +75,6 @@ class AuthRepository(
             Result.failure(Exception("Неизвестная ошибка: ${e.message}"))
         }
     }
-
     suspend fun getGroups(): Result<List<GroupDto>> {
         return try {
             val response = publicApiService.getGroups()

@@ -33,22 +33,18 @@ fun RegisterScreen(
     var email by remember { mutableStateOf("") }
     var phoneNumber by remember { mutableStateOf("") }
     var expanded by remember { mutableStateOf(false) }
-
     val registerState by viewModel.registerState.collectAsState()
     val groupsState by viewModel.groupsState.collectAsState()
-
     LaunchedEffect(registerState) {
         if (registerState is RegisterViewModel.RegisterState.Success) {
             onRegisterSuccess()
             viewModel.resetState()
         }
     }
-
     val groups: List<GroupDto> = when (groupsState) {
         is RegisterViewModel.GroupsState.Success -> (groupsState as RegisterViewModel.GroupsState.Success).groups
         else -> emptyList<GroupDto>()
     }
-
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -61,7 +57,6 @@ fun RegisterScreen(
             style = MaterialTheme.typography.headlineMedium,
             modifier = Modifier.padding(vertical = 16.dp)
         )
-
         OutlinedTextField(
             value = lastName,
             onValueChange = { lastName = it },
@@ -69,9 +64,7 @@ fun RegisterScreen(
             modifier = Modifier.fillMaxWidth(),
             isError = registerState is RegisterViewModel.RegisterState.Error
         )
-
         Spacer(modifier = Modifier.height(8.dp))
-
         OutlinedTextField(
             value = firstName,
             onValueChange = { firstName = it },
@@ -79,18 +72,14 @@ fun RegisterScreen(
             modifier = Modifier.fillMaxWidth(),
             isError = registerState is RegisterViewModel.RegisterState.Error
         )
-
         Spacer(modifier = Modifier.height(8.dp))
-
         OutlinedTextField(
             value = middleName,
             onValueChange = { middleName = it },
             label = { Text("Отчество") },
             modifier = Modifier.fillMaxWidth()
         )
-
         Spacer(modifier = Modifier.height(8.dp))
-
         OutlinedTextField(
             value = birthDate,
             onValueChange = { birthDate = it },
@@ -98,9 +87,7 @@ fun RegisterScreen(
             modifier = Modifier.fillMaxWidth(),
             placeholder = { Text("1990-01-01") }
         )
-
         Spacer(modifier = Modifier.height(8.dp))
-
         Text("Пол", style = MaterialTheme.typography.labelLarge)
         Row {
             Row(modifier = Modifier.weight(1f)) {
@@ -118,9 +105,7 @@ fun RegisterScreen(
                 Text("Женский", modifier = Modifier.padding(start = 8.dp))
             }
         }
-
         Spacer(modifier = Modifier.height(8.dp))
-
         when (groupsState) {
             is RegisterViewModel.GroupsState.Loading -> {
                 LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
@@ -142,7 +127,6 @@ fun RegisterScreen(
                             }
                         }
                     )
-
                     DropdownMenu(
                         expanded = expanded,
                         onDismissRequest = { expanded = false },
@@ -167,9 +151,7 @@ fun RegisterScreen(
                 )
             }
         }
-
         Spacer(modifier = Modifier.height(8.dp))
-
         OutlinedTextField(
             value = login,
             onValueChange = { login = it },
@@ -177,9 +159,7 @@ fun RegisterScreen(
             modifier = Modifier.fillMaxWidth(),
             isError = registerState is RegisterViewModel.RegisterState.Error
         )
-
         Spacer(modifier = Modifier.height(8.dp))
-
         OutlinedTextField(
             value = password,
             onValueChange = { password = it },
@@ -189,9 +169,7 @@ fun RegisterScreen(
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
             isError = registerState is RegisterViewModel.RegisterState.Error
         )
-
         Spacer(modifier = Modifier.height(8.dp))
-
         OutlinedTextField(
             value = email,
             onValueChange = { email = it },
@@ -200,9 +178,7 @@ fun RegisterScreen(
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
             isError = registerState is RegisterViewModel.RegisterState.Error
         )
-
         Spacer(modifier = Modifier.height(8.dp))
-
         OutlinedTextField(
             value = phoneNumber,
             onValueChange = { phoneNumber = it },
@@ -211,9 +187,7 @@ fun RegisterScreen(
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
             isError = registerState is RegisterViewModel.RegisterState.Error
         )
-
         Spacer(modifier = Modifier.height(16.dp))
-
         Button(
             onClick = {
                 viewModel.register(
@@ -230,7 +204,6 @@ fun RegisterScreen(
                 Text("Зарегистрироваться")
             }
         }
-
         if (registerState is RegisterViewModel.RegisterState.Error) {
             Spacer(modifier = Modifier.height(8.dp))
             Text(

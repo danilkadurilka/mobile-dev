@@ -19,16 +19,13 @@ fun LoginScreen(
 ) {
     var login by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
-
     val loginState by viewModel.loginState.collectAsState()
-
     LaunchedEffect(loginState) {
         if (loginState is LoginViewModel.LoginState.Success) {
             onLoginSuccess()
             viewModel.resetState()
         }
     }
-
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
@@ -49,9 +46,7 @@ fun LoginScreen(
                     text = "Вход в систему",
                     style = MaterialTheme.typography.headlineMedium
                 )
-
                 Spacer(modifier = Modifier.height(32.dp))
-
                 OutlinedTextField(
                     value = login,
                     onValueChange = { login = it },
@@ -60,9 +55,7 @@ fun LoginScreen(
                     singleLine = true,
                     isError = loginState is LoginViewModel.LoginState.Error
                 )
-
                 Spacer(modifier = Modifier.height(16.dp))
-
                 OutlinedTextField(
                     value = password,
                     onValueChange = { password = it },
@@ -73,9 +66,7 @@ fun LoginScreen(
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                     isError = loginState is LoginViewModel.LoginState.Error
                 )
-
                 Spacer(modifier = Modifier.height(24.dp))
-
                 Button(
                     onClick = { viewModel.login(login, password) },
                     modifier = Modifier.fillMaxWidth(),
@@ -87,13 +78,10 @@ fun LoginScreen(
                         Text("Войти")
                     }
                 }
-
                 Spacer(modifier = Modifier.height(16.dp))
-
                 TextButton(onClick = onNavigateToRegister) {
                     Text("Нет аккаунта? Зарегистрироваться")
                 }
-
                 if (loginState is LoginViewModel.LoginState.Error) {
                     Spacer(modifier = Modifier.height(16.dp))
                     Text(

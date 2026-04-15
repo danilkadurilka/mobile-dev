@@ -12,15 +12,12 @@ interface ApiService {
     suspend fun login(
         @Body credentials: Map<String, String>
     ): Response<AuthResponse>
-
     @POST("auth/register")
     suspend fun register(
         @Body request: RegisterRequest
     ): Response<Unit>
-
     @GET("users")
     suspend fun getUsers(): Response<List<UserDto>>
-
     @GET("groups")
     suspend fun getGroups(): Response<List<GroupDto>>
 }

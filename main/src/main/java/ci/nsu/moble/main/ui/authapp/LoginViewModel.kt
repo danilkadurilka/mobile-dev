@@ -10,23 +10,19 @@ import kotlinx.coroutines.launch
 class LoginViewModel(
     private val repository: AuthRepository
 ) : ViewModel() {
-
     sealed class LoginState {
         object Idle : LoginState()
         object Loading : LoginState()
         data class Success(val message: String) : LoginState()
         data class Error(val message: String) : LoginState()
     }
-
     private val _loginState = MutableStateFlow<LoginState>(LoginState.Idle)
     val loginState: StateFlow<LoginState> = _loginState
-
     fun login(login: String, password: String) {
         if (login.isBlank() || password.isBlank()) {
             _loginState.value = LoginState.Error("Заполните все поля")
             return
         }
-
         viewModelScope.launch {
             _loginState.value = LoginState.Loading
             val result = repository.login(login, password)
@@ -37,7 +33,6 @@ class LoginViewModel(
             }
         }
     }
-
     fun resetState() {
         _loginState.value = LoginState.Idle
     }

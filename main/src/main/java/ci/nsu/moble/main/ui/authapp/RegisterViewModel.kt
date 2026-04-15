@@ -14,30 +14,24 @@ import kotlinx.coroutines.launch
 class RegisterViewModel(
     private val repository: AuthRepository
 ) : ViewModel() {
-
     sealed class RegisterState {
         object Idle : RegisterState()
         object Loading : RegisterState()
         object Success : RegisterState()
         data class Error(val message: String) : RegisterState()
     }
-
     sealed class GroupsState {
         object Loading : GroupsState()
         data class Success(val groups: List<GroupDto>) : GroupsState()
         data class Error(val message: String) : GroupsState()
     }
-
     private val _registerState = MutableStateFlow<RegisterState>(RegisterState.Idle)
     val registerState: StateFlow<RegisterState> = _registerState
-
     private val _groupsState = MutableStateFlow<GroupsState>(GroupsState.Loading)
     val groupsState: StateFlow<GroupsState> = _groupsState
-
     init {
         loadGroups()
     }
-
     private fun loadGroups() {
         viewModelScope.launch {
             _groupsState.value = GroupsState.Loading
@@ -49,10 +43,8 @@ class RegisterViewModel(
             }
         }
     }
-
     fun register(
-        firstName: String,
-        lastName: String,
+        firstName: String, lastName: String,
         middleName: String,
         birthDate: String,
         gender: String,
@@ -62,23 +54,19 @@ class RegisterViewModel(
         email: String,
         phoneNumber: String
     ) {
-        // Валидация
         if (firstName.isBlank() || lastName.isBlank() || login.isBlank() ||
             password.isBlank() || email.isBlank() || phoneNumber.isBlank()) {
             _registerState.value = RegisterState.Error("Заполните все обязательные поля")
             return
         }
-
         if (password.length < 6) {
             _registerState.value = RegisterState.Error("Пароль должен содержать минимум 6 символов")
             return
         }
-
         if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             _registerState.value = RegisterState.Error("Введите корректный email")
             return
         }
-
         val person = PersonDto(
             firstName = firstName,
             lastName = lastName,
@@ -87,7 +75,6 @@ class RegisterViewModel(
             gender = gender,
             groupId = groupId
         )
-
         val request = RegisterRequest(
             login = login,
             password = password,
@@ -97,7 +84,6 @@ class RegisterViewModel(
             authAllowed = true,
             person = person
         )
-
         viewModelScope.launch {
             _registerState.value = RegisterState.Loading
             val result = repository.register(request)
@@ -108,7 +94,6 @@ class RegisterViewModel(
             }
         }
     }
-
     fun resetState() {
         _registerState.value = RegisterState.Idle
     }

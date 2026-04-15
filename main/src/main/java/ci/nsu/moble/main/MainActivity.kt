@@ -10,17 +10,14 @@ import ci.nsu.moble.main.ui.authapp.data.storage.TokenManager
 import ci.nsu.moble.main.ui.theme.PracticeTheme
 
 class MainActivity : ComponentActivity() {
-
     private lateinit var tokenManager: TokenManager
     private lateinit var authRepository: AuthRepository
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         tokenManager = TokenManager(this)
         val apiService = NetworkModule.provideApiService(tokenManager)
         val publicApiService = NetworkModule.providePublicApiService()
         authRepository = AuthRepository(apiService, publicApiService, tokenManager)
-
         setContent {
             PracticeTheme {
                 NavGraph(

@@ -11,20 +11,16 @@ import kotlinx.coroutines.launch
 class MainViewModel(
     private val repository: AuthRepository
 ) : ViewModel() {
-
     sealed class UsersState {
         object Loading : UsersState()
         data class Success(val users: List<UserDto>) : UsersState()
         data class Error(val message: String) : UsersState()
     }
-
     private val _usersState = MutableStateFlow<UsersState>(UsersState.Loading)
     val usersState: StateFlow<UsersState> = _usersState
-
     init {
         loadUsers()
     }
-
     fun loadUsers() {
         viewModelScope.launch {
             _usersState.value = UsersState.Loading
@@ -36,7 +32,6 @@ class MainViewModel(
             }
         }
     }
-
     fun logout() {
         repository.logout()
     }

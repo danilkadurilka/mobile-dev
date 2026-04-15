@@ -17,7 +17,6 @@ fun MainScreen(
     viewModel: MainViewModel
 ) {
     val usersState by viewModel.usersState.collectAsState()
-
     Scaffold(
         topBar = {
             TopAppBar(
@@ -83,7 +82,6 @@ fun UserCard(user: UserDto) {
         Column(
             modifier = Modifier.padding(16.dp)
         ) {
-            // У user больше нет поля person, поэтому показываем логин
             Text(
                 text = user.login,
                 style = MaterialTheme.typography.titleMedium

@@ -13,24 +13,20 @@ sealed class Screen(val route: String) {
     object Register : Screen("register")
     object Main : Screen("main")
 }
-
 @Composable
 fun NavGraph(
     authRepository: AuthRepository,
     tokenManager: TokenManager
 ) {
     val navController = rememberNavController()
-
     val loginViewModel = remember { LoginViewModel(authRepository) }
     val registerViewModel = remember { RegisterViewModel(authRepository) }
     val mainViewModel = remember { MainViewModel(authRepository) }
-
     val startDestination = if (tokenManager.isLoggedIn()) {
         Screen.Main.route
     } else {
         Screen.Login.route
     }
-
     NavHost(
         navController = navController,
         startDestination = startDestination
@@ -48,7 +44,6 @@ fun NavGraph(
                 viewModel = loginViewModel
             )
         }
-
         composable(Screen.Register.route) {
             RegisterScreen(
                 onRegisterSuccess = {
@@ -57,7 +52,6 @@ fun NavGraph(
                 viewModel = registerViewModel
             )
         }
-
         composable(Screen.Main.route) {
             MainScreen(
                 onLogout = {

@@ -11,26 +11,21 @@ import java.util.concurrent.TimeUnit
 
 object NetworkModule {
     private const val BASE_URL = "http://192.168.200.160:8080/api/"
-
     fun providePublicApiService(): PublicApiService {
         val loggingInterceptor = HttpLoggingInterceptor().apply {
             level = HttpLoggingInterceptor.Level.BODY
         }
-
         val client = OkHttpClient.Builder()
             .addInterceptor(loggingInterceptor)
             .connectTimeout(30, TimeUnit.SECONDS)
             .readTimeout(30, TimeUnit.SECONDS)
             .writeTimeout(30, TimeUnit.SECONDS)
             .build()
-
         val json = Json {
             ignoreUnknownKeys = true
             isLenient = true
         }
-
         val contentType = "application/json".toMediaType()
-
         return Retrofit.Builder()
             .baseUrl(BASE_URL)
             .client(client)
@@ -42,9 +37,7 @@ object NetworkModule {
         val loggingInterceptor = HttpLoggingInterceptor().apply {
             level = HttpLoggingInterceptor.Level.BODY
         }
-
         val authInterceptor = AuthInterceptor(tokenManager)
-
         val client = OkHttpClient.Builder()
             .addInterceptor(loggingInterceptor)
             .addInterceptor(authInterceptor)
@@ -52,14 +45,11 @@ object NetworkModule {
             .readTimeout(30, TimeUnit.SECONDS)
             .writeTimeout(30, TimeUnit.SECONDS)
             .build()
-
         val json = Json {
             ignoreUnknownKeys = true
             isLenient = true
         }
-
         val contentType = "application/json".toMediaType()
-
         return Retrofit.Builder()
             .baseUrl(BASE_URL)
             .client(client)
