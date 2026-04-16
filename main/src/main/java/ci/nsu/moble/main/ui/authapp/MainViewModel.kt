@@ -19,7 +19,7 @@ class MainViewModel(
     private val _usersState = MutableStateFlow<UsersState>(UsersState.Loading)
     val usersState: StateFlow<UsersState> = _usersState
     init {
-        loadUsers()
+    //    loadUsers()
     }
     fun loadUsers() {
         viewModelScope.launch {
