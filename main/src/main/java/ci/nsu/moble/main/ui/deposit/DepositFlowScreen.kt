@@ -19,7 +19,8 @@ fun DepositFlowScreen(
         viewModel.reset()
         step = 1
     }
-    when (step) {
+    when (step)
+    {
         1 -> Step1Screen(
             state = state,
             onAmountChange = viewModel::onAmountChange,

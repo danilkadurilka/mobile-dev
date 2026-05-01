@@ -14,6 +14,9 @@ import androidx.compose.ui.unit.dp
 fun UsersScreen(viewModel: UsersViewModel)
 {
     val state by viewModel.state.collectAsState()
+    LaunchedEffect(Unit) {
+        viewModel.loadUsers()
+    }
     Scaffold(
         topBar = {
             TopAppBar(title = { Text("Пользователи") })
@@ -25,14 +28,20 @@ fun UsersScreen(viewModel: UsersViewModel)
                 .padding(paddingValues),
             contentAlignment = Alignment.Center
         ) {
-            when (val s = state) {
+            when (val s = state)
+            {
+                is UsersViewModel.UsersState.FirstLaunch -> {
+                    CircularProgressIndicator()
+                }
                 is UsersViewModel.UsersState.Loading -> {
                     CircularProgressIndicator()
                 }
                 is UsersViewModel.UsersState.Success -> {
-                    if (s.users.isEmpty()) {
+                    if (s.users.isEmpty())
+                    {
                         Text("Нет пользователей")
-                    } else {
+                    } else
+                    {
                         LazyColumn {
                             items(s.users) { user ->
                                 Card(

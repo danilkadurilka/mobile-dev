@@ -15,23 +15,18 @@ class DependencesInjection(context: Context)
     private val database: DepositAppDatabase by lazy{
         DepositAppDatabase.getDb(context)
     }
-
     val depositDao: DepositDAO by lazy {
         database.dao()
     }
-
     val apiService: ApiService by lazy {
         NetworkModule.provideApiService(tokenManager)
     }
-
     val authRepository: AuthRepository by lazy {
         AuthRepository(apiService, tokenManager)
     }
-
     val depositRepository: DepositRepository by lazy {
         DepositRepository(depositDao)
     }
-
     val viewModelFactory: ViewModelFactory by lazy {
         ViewModelFactory(this)
     }

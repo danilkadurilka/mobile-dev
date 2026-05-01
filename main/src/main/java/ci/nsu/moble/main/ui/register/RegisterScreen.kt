@@ -25,7 +25,8 @@ import java.util.Calendar
 fun RegisterScreen(
     onRegisterSuccess: () -> Unit,
     viewModel: RegisterViewModel
-) {
+)
+{
     var firstName by remember { mutableStateOf("") }
     var lastName by remember { mutableStateOf("") }
     var middleName by remember { mutableStateOf("") }
@@ -50,7 +51,6 @@ fun RegisterScreen(
         calendar.get(Calendar.MONTH),
         calendar.get(Calendar.DAY_OF_MONTH)
     )
-
     LaunchedEffect(registerState) {
         if (registerState is RegisterViewModel.RegisterState.Success) {
             onRegisterSuccess()

@@ -33,37 +33,38 @@ class DepositVM(
 
     private var currentUserId: Long = userId
 
-    init {
-        Log.d("DepositVM", "Init with userId: $userId")
-        if (userId > 0) {
+    init
+    {
+        if (userId > 0)
+        {
             loadDeposits()
         }
     }
-
-    private fun loadDeposits() {
+    private fun loadDeposits()
+    {
         viewModelScope.launch {
             repository.getDeposits(currentUserId).collect { list ->
-                Log.d("DepositVM", "Loaded ${list.size} deposits for user $currentUserId")
                 _uiState.update { it.copy(history = list) }
             }
         }
     }
-
-    fun updateUserId(newUserId: Long) {
-        if (newUserId > 0 && newUserId != currentUserId) {
-            Log.d("DepositVM", "Updating userId from $currentUserId to $newUserId")
+    fun updateUserId(newUserId: Long)
+    {
+        if (newUserId > 0 && newUserId != currentUserId)
+        {
             currentUserId = newUserId
             loadDeposits()
         }
     }
-
-    fun onAmountChange(value: String) {
+    fun onAmountChange(value: String)
+    {
         _uiState.update { it.copy(amount = value) }
     }
-
-    fun onMonthsChange(value: String) {
+    fun onMonthsChange(value: String)
+    {
         val m = value.toIntOrNull() ?: 0
-        val r = when {
+        val r = when
+        {
             m <= 0 -> 0.0
             m < 6 -> 15.0
             m < 12 -> 10.0
@@ -71,28 +72,28 @@ class DepositVM(
         }
         _uiState.update { it.copy(months = value, selectedRate = r) }
     }
-
-    fun onTopUpChange(value: String) {
+    fun onTopUpChange(value: String)
+    {
         _uiState.update { it.copy(monthTopUp = value) }
     }
-
-    fun calculate() {
+    fun calculate()
+    {
         val p = _uiState.value.amount.toDoubleOrNull() ?: 0.0
         val n = _uiState.value.months.toIntOrNull() ?: 0
         val r = _uiState.value.selectedRate
         val m = _uiState.value.monthTopUp.toDoubleOrNull() ?: 0.0
         var total = p
         val monthlyRate = (r / 100) / 12
-        repeat(n) {
+        repeat(n)
+        {
             total += total * monthlyRate
-            if (m > 0) {
+            if (m > 0)
                 total += m
-            }
         }
         val totalDeposits = p + m * n
         val profit = total - totalDeposits
         val dateToStr = SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.getDefault()).format(Date())
-        _uiState.update {
+        _uiState.update{
             it.copy(
                 result = DepositEntity(
                     userId = currentUserId,
@@ -107,7 +108,6 @@ class DepositVM(
             )
         }
     }
-
     fun save() {
         viewModelScope.launch(Dispatchers.IO) {
             _uiState.value.result?.let { entity ->
@@ -115,13 +115,11 @@ class DepositVM(
             }
         }
     }
-
     fun reset() {
         _uiState.update {
             DepositUiState(history = it.history)
         }
     }
-
     fun delete(deposit: DepositEntity) {
         viewModelScope.launch(Dispatchers.IO) {
             repository.deleteDeposit(deposit)

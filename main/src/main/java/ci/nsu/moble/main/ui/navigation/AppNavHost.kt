@@ -100,13 +100,14 @@ fun AppNavHost(dependencesInjection: DependencesInjection)
             startDestination = startDestination,
             modifier = Modifier.padding(innerPadding)
         ) {
-            composable("auth") {
+            composable("auth")
+            {
                 val loginViewModel: LoginViewModel = viewModel(factory = dependencesInjection.viewModelFactory)
                 LoginScreen(
                     onLoginSuccess = {
                         depositVM.reset()
                         val userId = dependencesInjection.tokenManager.getUserId() ?: -1L
-                        depositVM.updateUserId(userId) // ✅ обновляем userId
+                        depositVM.updateUserId(userId)
                         navController.navigate(BottomNavItem.Users.route) {
                             popUpTo("auth") { inclusive = true }
                         }
@@ -117,7 +118,8 @@ fun AppNavHost(dependencesInjection: DependencesInjection)
                     viewModel = loginViewModel
                 )
             }
-            composable("register") {
+            composable("register")
+            {
                 val registerViewModel: RegisterViewModel = viewModel(factory = dependencesInjection.viewModelFactory)
                 RegisterScreen(
                     onRegisterSuccess = {
@@ -126,18 +128,21 @@ fun AppNavHost(dependencesInjection: DependencesInjection)
                     viewModel = registerViewModel
                 )
             }
-            composable(BottomNavItem.Users.route) {
+            composable(BottomNavItem.Users.route)
+            {
                 val usersViewModel: UsersViewModel = viewModel(factory = dependencesInjection.viewModelFactory)
                 UsersScreen(viewModel = usersViewModel)
             }
-            composable(BottomNavItem.History.route) {
+            composable(BottomNavItem.History.route)
+            {
                 val state by depositVM.uiState.collectAsState()
                 HistoryScreen(
                     history = state.history,
                     onDelete = { depositVM.delete(it) }
                 )
             }
-            composable(BottomNavItem.NewDeposit.route) {
+            composable(BottomNavItem.NewDeposit.route)
+            {
                 DepositFlowScreen(
                     viewModel = depositVM,
                     onFinish = {

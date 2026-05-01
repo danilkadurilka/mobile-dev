@@ -76,9 +76,12 @@ fun LoginScreen(
                     modifier = Modifier.fillMaxWidth(),
                     enabled = loginState !is LoginViewModel.LoginState.Loading
                 ) {
-                    if (loginState is LoginViewModel.LoginState.Loading) {
+                    if (loginState is LoginViewModel.LoginState.Loading)
+                    {
                         CircularProgressIndicator(modifier = Modifier.size(24.dp))
-                    } else {
+                    }
+                    else
+                    {
                         Text("Войти")
                     }
                 }
@@ -86,7 +89,8 @@ fun LoginScreen(
                 TextButton(onClick = onNavigateToRegister) {
                     Text("Нет аккаунта? Зарегистрироваться")
                 }
-                if (loginState is LoginViewModel.LoginState.Error) {
+                if (loginState is LoginViewModel.LoginState.Error)
+                {
                     Spacer(modifier = Modifier.height(16.dp))
                     Text(
                         text = (loginState as LoginViewModel.LoginState.Error).message,
