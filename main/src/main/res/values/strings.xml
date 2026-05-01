@@ -1,4 +1,11 @@
 <resources>
-    <string name="app_name">main</string>
+    <string name="app_name">Расчёт вкладов</string>
     <string name="title_activity_main">MainActivity</string>
+    <string name="screen_main">Главная</string>
+    <string name="screen_step1">Ввод данных</string>
+    <string name="screen_step2">Доп. параметры</string>
+    <string name="screen_result">Результат</string>
+    <string name="screen_history">Мои расчёты</string>
+    <string name="screen_users">Пользователи</string>
+    <string name="screen_new_deposit">Новый расчёт</string>
 </resources>

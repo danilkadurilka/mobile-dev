@@ -1,4 +1,4 @@
-package ci.nsu.moble.main.ui.authapp.data.models
+package ci.nsu.moble.main.data.models
 
 import kotlinx.serialization.Serializable
 

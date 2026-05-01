@@ -1,16 +1,18 @@
-package ci.nsu.moble.main.ui.authapp
+package ci.nsu.moble.main.ui.auth
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import ci.nsu.moble.main.ui.authapp.data.repository.AuthRepository
+import ci.nsu.moble.main.data.repository.AuthRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 class LoginViewModel(
     private val repository: AuthRepository
-) : ViewModel() {
-    sealed class LoginState {
+) : ViewModel()
+{
+    sealed class LoginState
+    {
         object Idle : LoginState()
         object Loading : LoginState()
         data class Success(val message: String) : LoginState()
@@ -26,10 +28,12 @@ class LoginViewModel(
         viewModelScope.launch {
             _loginState.value = LoginState.Loading
             val result = repository.login(login, password)
-            _loginState.value = if (result.isSuccess) {
-                LoginState.Success("Вход выполнен успешно")
-            } else {
-                LoginState.Error(result.exceptionOrNull()?.message ?: "Ошибка входа")
+            _loginState.value = when {
+                result.isSuccess -> {
+                    // ✅ Очищаем предыдущие данные при новом входе
+                    LoginState.Success("Вход выполнен успешно")
+                }
+                else -> LoginState.Error(result.exceptionOrNull()?.message ?: "Ошибка входа")
             }
         }
     }

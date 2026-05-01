@@ -3,28 +3,25 @@ package ci.nsu.moble.main
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import ci.nsu.moble.main.ui.authapp.NavGraph
-import ci.nsu.moble.main.ui.authapp.data.network.NetworkModule
-import ci.nsu.moble.main.ui.authapp.data.repository.AuthRepository
-import ci.nsu.moble.main.ui.authapp.data.storage.TokenManager
-import ci.nsu.moble.main.ui.theme.PracticeTheme
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.ui.Modifier
+import ci.nsu.moble.main.dependences.DependencesInjection
+import ci.nsu.moble.main.ui.navigation.AppNavHost
 
-class MainActivity : ComponentActivity() {
-    private lateinit var tokenManager: TokenManager
-    private lateinit var authRepository: AuthRepository
-    override fun onCreate(savedInstanceState: Bundle?) {
+class MainActivity : ComponentActivity()
+{
+    override fun onCreate(savedInstanceState: Bundle?)
+    {
         super.onCreate(savedInstanceState)
-        tokenManager = TokenManager(this)
-        tokenManager.clearToken()
-        val apiService = NetworkModule.provideApiService(tokenManager)
-        val publicApiService = NetworkModule.providePublicApiService()
-        authRepository = AuthRepository(apiService, publicApiService, tokenManager)
-        setContent {
-            PracticeTheme {
-                NavGraph(
-                    authRepository = authRepository,
-                    tokenManager = tokenManager
-                )
+        val dependencesInjection = DependencesInjection(applicationContext)
+        dependencesInjection.tokenManager.clearAll()
+        setContent{
+            MaterialTheme {
+                Surface(modifier = Modifier.fillMaxSize()) {
+                    AppNavHost(dependencesInjection = dependencesInjection)
+                }
             }
         }
     }

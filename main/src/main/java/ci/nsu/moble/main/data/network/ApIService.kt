@@ -1,13 +1,14 @@
-package ci.nsu.moble.main.ui.authapp.data.network
+package ci.nsu.moble.main.data.network
 
-import ci.nsu.moble.main.ui.authapp.data.models.AuthResponse
-import ci.nsu.moble.main.ui.authapp.data.models.GroupDto
-import ci.nsu.moble.main.ui.authapp.data.models.RegisterRequest
-import ci.nsu.moble.main.ui.authapp.data.models.UserDto
+import ci.nsu.moble.main.data.models.AuthResponse
+import ci.nsu.moble.main.data.models.GroupDto
+import ci.nsu.moble.main.data.models.RegisterRequest
+import ci.nsu.moble.main.data.models.UserDto
 import retrofit2.Response
 import retrofit2.http.*
 
-interface ApiService {
+interface ApiService
+{
     @POST("auth/login")
     suspend fun login(
         @Body credentials: Map<String, String>

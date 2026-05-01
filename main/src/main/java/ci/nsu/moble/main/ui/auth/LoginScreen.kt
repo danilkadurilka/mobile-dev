@@ -1,4 +1,4 @@
-package ci.nsu.moble.main.ui.authapp
+package ci.nsu.moble.main.ui.auth
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
@@ -15,13 +15,15 @@ import androidx.compose.ui.unit.dp
 fun LoginScreen(
     onLoginSuccess: () -> Unit,
     onNavigateToRegister: () -> Unit,
-    viewModel: LoginViewModel
-) {
-    var login by remember { mutableStateOf("") }
+    viewModel: LoginViewModel)
+{
+    var login by remember{ mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     val loginState by viewModel.loginState.collectAsState()
-    LaunchedEffect(loginState) {
-        if (loginState is LoginViewModel.LoginState.Success) {
+    LaunchedEffect(loginState)
+    {
+        if (loginState is LoginViewModel.LoginState.Success)
+        {
             onLoginSuccess()
             viewModel.resetState()
         }
@@ -29,13 +31,15 @@ fun LoginScreen(
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
-    ) {
+    )
+    {
         Card(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(32.dp),
             elevation = CardDefaults.cardElevation(8.dp)
-        ) {
+        )
+        {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()

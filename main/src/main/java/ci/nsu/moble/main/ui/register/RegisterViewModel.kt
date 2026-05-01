@@ -1,12 +1,12 @@
-package ci.nsu.moble.main.ui.authapp
+package ci.nsu.moble.main.ui.register
 
 import android.util.Patterns
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import ci.nsu.moble.main.ui.authapp.data.models.GroupDto
-import ci.nsu.moble.main.ui.authapp.data.models.PersonDto
-import ci.nsu.moble.main.ui.authapp.data.models.RegisterRequest
-import ci.nsu.moble.main.ui.authapp.data.repository.AuthRepository
+import ci.nsu.moble.main.data.models.GroupDto
+import ci.nsu.moble.main.data.models.PersonDto
+import ci.nsu.moble.main.data.models.RegisterRequest
+import ci.nsu.moble.main.data.repository.AuthRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -14,24 +14,30 @@ import kotlinx.coroutines.launch
 class RegisterViewModel(
     private val repository: AuthRepository
 ) : ViewModel() {
+
     sealed class RegisterState {
         object Idle : RegisterState()
         object Loading : RegisterState()
         object Success : RegisterState()
         data class Error(val message: String) : RegisterState()
     }
+
     sealed class GroupsState {
         object Loading : GroupsState()
         data class Success(val groups: List<GroupDto>) : GroupsState()
         data class Error(val message: String) : GroupsState()
     }
+
     private val _registerState = MutableStateFlow<RegisterState>(RegisterState.Idle)
     val registerState: StateFlow<RegisterState> = _registerState
+
     private val _groupsState = MutableStateFlow<GroupsState>(GroupsState.Loading)
     val groupsState: StateFlow<GroupsState> = _groupsState
+
     init {
         loadGroups()
     }
+
     private fun loadGroups() {
         viewModelScope.launch {
             _groupsState.value = GroupsState.Loading
@@ -43,8 +49,10 @@ class RegisterViewModel(
             }
         }
     }
+
     fun register(
-        firstName: String, lastName: String,
+        firstName: String,
+        lastName: String,
         middleName: String,
         birthDate: String,
         gender: String,
@@ -55,7 +63,8 @@ class RegisterViewModel(
         phoneNumber: String
     ) {
         if (firstName.isBlank() || lastName.isBlank() || login.isBlank() ||
-            password.isBlank() || email.isBlank() || phoneNumber.isBlank()) {
+            password.isBlank() || email.isBlank() || phoneNumber.isBlank()
+        ) {
             _registerState.value = RegisterState.Error("Заполните все обязательные поля")
             return
         }
@@ -67,6 +76,7 @@ class RegisterViewModel(
             _registerState.value = RegisterState.Error("Введите корректный email")
             return
         }
+
         val person = PersonDto(
             firstName = firstName,
             lastName = lastName,
@@ -84,6 +94,7 @@ class RegisterViewModel(
             authAllowed = true,
             person = person
         )
+
         viewModelScope.launch {
             _registerState.value = RegisterState.Loading
             val result = repository.register(request)
@@ -94,6 +105,7 @@ class RegisterViewModel(
             }
         }
     }
+
     fun resetState() {
         _registerState.value = RegisterState.Idle
     }
