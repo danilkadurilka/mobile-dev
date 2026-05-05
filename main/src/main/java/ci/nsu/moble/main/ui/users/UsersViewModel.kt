@@ -40,4 +40,7 @@ class UsersViewModel(
             }
         }
     }
+    fun logout() {
+        repository.logout()
+    }
 }

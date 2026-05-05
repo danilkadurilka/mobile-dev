@@ -125,4 +125,7 @@ class AuthRepository(
             Result.failure(Exception("Ошибка сети: ${e.message}"))
         }
     }
+    fun logout() {
+        tokenManager.clearAll()
+    }
 }

@@ -25,7 +25,7 @@ fun DepositFlowScreen(
             state = state,
             onAmountChange = viewModel::onAmountChange,
             onMonthsChange = viewModel::onMonthsChange,
-            onNavigateBack = onFinish,
+            onNavigateBack = {onFinish},
             onNavigateToStep2 = { step = 2 }
         )
         2 -> Step2Screen(

@@ -11,7 +11,7 @@ import androidx.compose.ui.unit.dp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun UsersScreen(viewModel: UsersViewModel)
+fun UsersScreen(viewModel: UsersViewModel,  onLogout: () -> Unit)
 {
     val state by viewModel.state.collectAsState()
     LaunchedEffect(Unit) {
@@ -19,7 +19,17 @@ fun UsersScreen(viewModel: UsersViewModel)
     }
     Scaffold(
         topBar = {
-            TopAppBar(title = { Text("Пользователи") })
+            TopAppBar(
+                title = { Text("Пользователи") },
+                actions = {
+                    Button(onClick = {
+                        viewModel.logout()
+                        onLogout()
+                    }) {
+                        Text("Выйти")
+                    }
+                }
+            )
         }
     ) { paddingValues ->
         Box(

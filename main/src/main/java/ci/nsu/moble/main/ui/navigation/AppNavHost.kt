@@ -131,7 +131,16 @@ fun AppNavHost(dependencesInjection: DependencesInjection)
             composable(BottomNavItem.Users.route)
             {
                 val usersViewModel: UsersViewModel = viewModel(factory = dependencesInjection.viewModelFactory)
-                UsersScreen(viewModel = usersViewModel)
+                UsersScreen(
+                    viewModel = usersViewModel,
+                    onLogout = {
+                        dependencesInjection.tokenManager.clearAll()
+                        depositVM.reset()
+                        navController.navigate("auth") {
+                            popUpTo(0) { inclusive = true }
+                        }
+                    }
+                )
             }
             composable(BottomNavItem.History.route)
             {
